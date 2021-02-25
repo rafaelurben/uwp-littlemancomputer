@@ -10,22 +10,24 @@
 
     <ScrollViewer>
         <StackPanel Margin="25">
+            <!-- Main -->
+            
             <TextBlock Text="LittleManComputer" Style="{StaticResource TitleTextBlockStyle}"/>
 
             <StackPanel Orientation="Horizontal" MinHeight="500" Margin="0,16">
-                <TextBox Margin="0,0,0,0" Name="Output_LineNumbers" Header="Line" AcceptsReturn="True" IsReadOnly="True" IsTabStop="False"/>
+                <TextBox Margin="0,0,0,0" Name="Output_LineNumbers" Header="Line" AcceptsReturn="True" IsReadOnly="True" IsTabStop="False" TextAlignment="Right"/>
                 <TextBox Margin="24,0,24,0" Name="Input_MachineCode" TextChanged="Input_MachineCode_TextChanged" Header="Machine code" ToolTipService.ToolTip="Enter your code here" AcceptsReturn="True" IsSpellCheckEnabled="False"/>
                 <TextBox Margin="0,0,0,0" Name="Output_MachineCodeEasy" Header="Easy readable machine code" ToolTipService.ToolTip="Easily read your code" AcceptsReturn="True" IsReadOnly="True" IsTabStop="False"/>
                 
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Button Name="Go" Margin="24" Content="Go" Click="Go_Click" ToolTipService.ToolTip="Run your code"/>
-                </StackPanel>
+                <Button Name="Go" VerticalAlignment="Top" Margin="24,250,24,24" Content="Go" Click="Go_Click" ToolTipService.ToolTip="Run your code"/>
 
-                <StackPanel>
-                    <TextBox Margin="0,0,0,0" Name="Input_Input" Header="Input" ToolTipService.ToolTip="Enter your input here" MinHeight="244"/>
+                <StackPanel MinWidth="100">
+                    <TextBox Margin="0,0,0,0" Name="Input_Input" Header="Input" ToolTipService.ToolTip="Enter your input here" AcceptsReturn="True" MinHeight="244"/>
                     <TextBox Margin="0,12,0,0" Name="Output_Output" Header="Output" ToolTipService.ToolTip="Your output will appear here" IsReadOnly="True" IsTabStop="False" MinHeight="244"/>
                 </StackPanel>
             </StackPanel>
+            
+            <!-- Help -->
 
             <TextBlock Margin="0,30,0,15" Text="Help" Style="{StaticResource TitleTextBlockStyle}"/>
             <TextBlock TextWrapping="WrapWholeWords">
@@ -33,7 +35,16 @@
                     <Hyperlink NavigateUri="https://en.wikipedia.org/wiki/Little_man_computer#Commands" IsTabStop="False">
                         <Run Text="Wikipedia page" />
                     </Hyperlink>
-                <Run Text="to learn more about 'Little man computers'."/>
+                <Run Text="to learn more about 'Little man computers'. Please note that this app only supports the numeric codes."/>
+                <Run Text="This app was created by" />
+                    <Hyperlink NavigateUri="https://rafaelurben.ch/" IsTabStop="False">
+                        <Run Text="Rafael Urben" />
+                    </Hyperlink>
+                <Run Text="and the source code can be found"/>
+                    <Hyperlink NavigateUri="https://github.com/rafaelurben/uwp-littlemancomputer" IsTabStop="False">
+                        <Run Text="here" />
+                    </Hyperlink>
+                <Run Text="on GitHub."/>
             </TextBlock>
         </StackPanel>
     </ScrollViewer>

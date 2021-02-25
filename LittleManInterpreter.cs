@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace LittleManComputer
 {
@@ -12,6 +13,13 @@ namespace LittleManComputer
     {
         int[] memory;
         int accumulator;
+        int memoryPosition;
+        int inputPosition;
+
+        bool finished = false;
+        bool error = false;
+
+        string output = "";
 
         readonly string[] enteredMachineCode;
         readonly string[] enteredInput;
@@ -20,9 +28,9 @@ namespace LittleManComputer
         {
             this.enteredMachineCode = enteredMachineCode;
             this.enteredInput = enteredInput;
-
-            // LIST.RemoveAll(string.IsNullOrWhiteSpace);
         }
+
+        // GUI Helpers
 
         public string GetLineNumbers()
         {
@@ -52,27 +60,27 @@ namespace LittleManComputer
             }
             if (200 <= command && command < 300)
             {
-                return "SUB " + (command - 100).ToString();
+                return "SUB " + (command - 200).ToString();
             }
             if (300 <= command && command < 400)
             {
-                return "STA " + (command - 100).ToString();
+                return "STA " + (command - 300).ToString();
             }
             if (500 <= command && command < 600)
             {
-                return "LDA " + (command - 100).ToString();
+                return "LDA " + (command - 500).ToString();
             }
             if (600 <= command && command < 700)
             {
-                return "BRA " + (command - 100).ToString();
+                return "BRA " + (command - 600).ToString();
             }
             if (700 <= command && command < 800)
             {
-                return "BRZ " + (command - 100).ToString();
+                return "BRZ " + (command - 700).ToString();
             }
             if (800 <= command && command < 900)
             {
-                return "BRP + " + (command - 100).ToString();
+                return "BRP + " + (command - 800).ToString();
             }
             if (command == 901)
             {
@@ -106,6 +114,195 @@ namespace LittleManComputer
                 }
             }
             return easyCode;
+        }
+
+        private void Output(string text)
+        {
+            output += text + "\r\n";
+        }
+
+        private int Input()
+        {
+            try
+            {
+                if (enteredInput.Length <= inputPosition)
+                {
+                    throw new Exception("Tried to read unexistant input!");
+                }
+
+                string currentLine = enteredInput[inputPosition];
+                inputPosition++;
+
+                if (int.TryParse(currentLine, out int number))
+                {
+                    return number;
+                }
+                else
+                {
+                    throw new Exception("Input is not a number!");
+                }
+            } catch (Exception e)
+            {
+                finished = false;
+                error = true;
+                Output("ERROR (Invalid Input)");
+
+                try
+                {
+                    ContentDialog dialog = new ContentDialog
+                    {
+                        Title = "FATAL: Unable to load input!",
+                        Content = "The following error occurred while trying to read the input: " + e.Message,
+                        CloseButtonText = "Close"
+                    };
+
+                    _ = dialog.ShowAsync();
+                }
+                catch (Exception)
+                {
+
+                }
+                return 0;
+            }
+        }
+
+        // Interpreter
+
+        private void LoadIntoMemory()
+        {
+            memory = new int[1000];
+            accumulator = 0;
+            memoryPosition = 0;
+            inputPosition = 0;
+
+            finished = false;
+
+            int pos = 0;
+            for (int i = 0; i < enteredMachineCode.Length; i++)
+            {
+                string currentLine = enteredMachineCode[i];
+                if (!(string.IsNullOrEmpty(currentLine.Replace(" ", ""))))
+                {
+                    if (int.TryParse(currentLine, out int number))
+                    {
+                        memory[pos] = number;
+                        pos++;
+                    } 
+                    else
+                    {
+                        finished = true;
+                        error = true;
+                        Output("ERROR (NaN)");
+
+                        try
+                        {
+                            ContentDialog dialog = new ContentDialog
+                            {
+                                Title = "FATAL: Not a number",
+                                Content = "Only numbers can be loaded into memory!",
+                                CloseButtonText = "Close"
+                            };
+
+                            _ = dialog.ShowAsync();
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void RunStep()
+        {
+            int command = memory[memoryPosition];
+            memoryPosition++;
+
+            if (100 <= command && command < 200)
+            {
+                accumulator += memory[command - 100];
+            }
+            else if (200 <= command && command < 300)
+            {
+                accumulator -= memory[command - 200];
+            }
+            else if (300 <= command && command < 400)
+            {
+                memory[command - 300] = accumulator;
+            }
+            else if (500 <= command && command < 600)
+            {
+                accumulator = memory[command - 500];
+            }
+            else if (600 <= command && command < 700)
+            {
+                memoryPosition = command - 600;
+            }
+            else if (700 <= command && command < 800)
+            {
+                if (accumulator == 0)
+                {
+                    memoryPosition = command - 700;
+                }
+            }
+            else if (800 <= command && command < 900)
+            {
+                if (accumulator >= 0)
+                {
+                    memoryPosition = command - 800;
+                }
+            }
+            else if (command == 901)
+            {
+                accumulator = Input();
+            }
+            else if (command == 902)
+            {
+                Output(accumulator.ToString());
+            }
+            else if (command == 0)
+            {
+                finished = true;
+            }
+            else
+            {
+                finished = true;
+                error = true;
+                Output("ERROR (Unknown Command)");
+
+                try
+                {
+                    ContentDialog dialog = new ContentDialog
+                    {
+                        Title = "Unknown command",
+                        Content = "Unknown command at line " + memoryPosition.ToString(),
+                        CloseButtonText = "Ok"
+                    };
+
+                    _ = dialog.ShowAsync();
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
+        public string Run()
+        {
+            LoadIntoMemory();
+
+            while (!finished)
+            {
+                RunStep();
+            }
+            if (!error)
+            {
+                Output("FINISHED");
+            }
+            return output;
         }
     }
 }

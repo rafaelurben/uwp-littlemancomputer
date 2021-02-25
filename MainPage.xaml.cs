@@ -41,7 +41,12 @@ namespace LittleManComputer
 
         private void Go_Click(object sender, RoutedEventArgs e)
         {
-
+            LittleManInterpreter interpreter = new LittleManInterpreter(
+               Regex.Split(Input_MachineCode.Text, "\r\n|\r|\n"),
+               Regex.Split(Input_Input.Text, "\r\n|\r|\n")
+            );
+            string output = interpreter.Run();
+            Output_Output.Text = output;
         }
     }
 }

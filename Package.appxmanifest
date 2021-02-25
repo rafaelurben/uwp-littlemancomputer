@@ -7,7 +7,7 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="9562dae3-cdcc-4abe-aeed-edebf24fa10e"
+    Name="littlemancomputer"
     Publisher="CN=rafae"
     Version="1.0.0.0" />
 
@@ -15,7 +15,7 @@
 
   <Properties>
     <DisplayName>LittleManComputer</DisplayName>
-    <PublisherDisplayName>rafae</PublisherDisplayName>
+    <PublisherDisplayName>rafaelurben</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -35,10 +35,12 @@
         DisplayName="LittleManComputer"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="LittleManComputer"
+        Description="A little man computer for Windows"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="landscape"/></uap:InitialRotationPreference>
       </uap:VisualElements>
     </Application>
   </Applications>
