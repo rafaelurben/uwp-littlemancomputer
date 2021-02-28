@@ -30,6 +30,66 @@
             <!-- Help -->
 
             <TextBlock Margin="0,30,0,15" Text="Help" Style="{StaticResource TitleTextBlockStyle}"/>
+
+            <Grid Margin="10,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="AUTO"/>
+                    <ColumnDefinition Width="AUTO"/>
+                    <ColumnDefinition Width="AUTO"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Code" Grid.Column="0" Grid.Row="0" Margin="0,0,15,5" />
+                <TextBlock Text="Short" Grid.Column="1" Grid.Row="0" Margin="0,0,15,5" />
+                <TextBlock Text="Description" Grid.Column="2" Grid.Row="0" Margin="0,0,15,5" />
+                <TextBlock Text="1xx" Grid.Column="0" Grid.Row="1" />
+                <TextBlock Text="ADD" Grid.Column="1" Grid.Row="1" />
+                <TextBlock Text="Add" Grid.Column="2" Grid.Row="1" />
+                <TextBlock Text="2xx" Grid.Column="0" Grid.Row="2" />
+                <TextBlock Text="SUB" Grid.Column="1" Grid.Row="2" />
+                <TextBlock Text="Subtract" Grid.Column="2" Grid.Row="2" />
+                <TextBlock Text="3xx" Grid.Column="0" Grid.Row="3" />
+                <TextBlock Text="STA" Grid.Column="1" Grid.Row="3" />
+                <TextBlock Text="Store" Grid.Column="2" Grid.Row="3" />
+                <TextBlock Text="5xx" Grid.Column="0" Grid.Row="4" />
+                <TextBlock Text="LDA" Grid.Column="1" Grid.Row="4" />
+                <TextBlock Text="Load" Grid.Column="2" Grid.Row="4" />
+                <TextBlock Text="6xx" Grid.Column="0" Grid.Row="5" />
+                <TextBlock Text="BRA" Grid.Column="1" Grid.Row="5" />
+                <TextBlock Text="Branch" Grid.Column="2" Grid.Row="5" />
+                <TextBlock Text="7xx" Grid.Column="0" Grid.Row="6" />
+                <TextBlock Text="BRZ" Grid.Column="1" Grid.Row="6" />
+                <TextBlock Text="Branch if 0" Grid.Column="2" Grid.Row="6" />
+                <TextBlock Text="8xx" Grid.Column="0" Grid.Row="7" />
+                <TextBlock Text="BRP" Grid.Column="1" Grid.Row="7" />
+                <TextBlock Text="Branch if positive" Grid.Column="2" Grid.Row="7" />
+                <TextBlock Text="901" Grid.Column="0" Grid.Row="8" />
+                <TextBlock Text="INP" Grid.Column="1" Grid.Row="8" />
+                <TextBlock Text="Input" Grid.Column="2" Grid.Row="8" />
+                <TextBlock Text="902" Grid.Column="0" Grid.Row="9" />
+                <TextBlock Text="OUT" Grid.Column="1" Grid.Row="9" />
+                <TextBlock Text="Output" Grid.Column="2" Grid.Row="9" />
+                <TextBlock Text="000" Grid.Column="0" Grid.Row="10" />
+                <TextBlock Text="HLT" Grid.Column="1" Grid.Row="10" />
+                <TextBlock Text="Halt (Exit)" Grid.Column="2" Grid.Row="10" />
+                <TextBlock Text="xxx" Grid.Column="0" Grid.Row="11" />
+                <TextBlock Text="DAT" Grid.Column="1" Grid.Row="11" />
+                <TextBlock Text="Data" Grid.Column="2" Grid.Row="11" />
+            </Grid>
+
             <TextBlock TextWrapping="WrapWholeWords">
                 <Run Text="Visit the" />
                     <Hyperlink NavigateUri="https://en.wikipedia.org/wiki/Little_man_computer#Commands" IsTabStop="False">
