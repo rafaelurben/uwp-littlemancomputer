@@ -80,7 +80,7 @@ namespace LittleManComputer
             }
             if (800 <= command && command < 900)
             {
-                return "BRP + " + (command - 800).ToString();
+                return "BRP " + (command - 800).ToString();
             }
             if (command == 901)
             {
