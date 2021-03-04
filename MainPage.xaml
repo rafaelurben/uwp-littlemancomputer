@@ -15,16 +15,23 @@
             <TextBlock Text="LittleManComputer" Style="{StaticResource TitleTextBlockStyle}"/>
 
             <StackPanel Orientation="Horizontal" MinHeight="500" Margin="0,16">
-                <TextBox Margin="0,0,0,0" Name="Output_LineNumbers" Header="Line" AcceptsReturn="True" IsReadOnly="True" IsTabStop="False" TextAlignment="Right"/>
-                <TextBox Margin="24,0,24,0" Name="Input_MachineCode" TextChanged="Input_MachineCode_TextChanged" Header="Machine code" ToolTipService.ToolTip="Enter your code here" AcceptsReturn="True" IsSpellCheckEnabled="False"/>
-                <TextBox Margin="0,0,0,0" Name="Output_MachineCodeEasy" Header="Easy readable machine code" ToolTipService.ToolTip="Easily read your code" AcceptsReturn="True" IsReadOnly="True" IsTabStop="False"/>
-                
-                <Button Name="Go" VerticalAlignment="Top" Margin="24,250,24,24" Content="Go" Click="Go_Click" ToolTipService.ToolTip="Run your code"/>
+                <TextBox Margin="0,0,0,0" Name="Output_LineNumbers" Header="Line" AcceptsReturn="True" IsReadOnly="True" TextAlignment="Right"/>
+                <TextBox Margin="24,0,24,0" Name="Input_MachineCode" TextChanged="Input_MachineCode_TextChanged" Header="Machine code" ToolTipService.ToolTip="Enter your code here" AcceptsReturn="True" IsSpellCheckEnabled="False" />
+                <TextBox Margin="0,0,0,0" Name="Output_MachineCodeEasy" Header="Easy readable machine code" ToolTipService.ToolTip="Easily read your code" AcceptsReturn="True" IsReadOnly="True"/>
 
-                <StackPanel MinWidth="100">
-                    <TextBox Margin="0,0,0,0" Name="Input_Input" Header="Input" ToolTipService.ToolTip="Enter your input here" AcceptsReturn="True" MinHeight="244"/>
-                    <TextBox Margin="0,12,0,0" Name="Output_Output" Header="Output" ToolTipService.ToolTip="Your output will appear here" IsReadOnly="True" IsTabStop="False" MinHeight="244"/>
+                <StackPanel Margin="24,220,24,24" Orientation="Vertical">
+                    <Button Name="Go" HorizontalAlignment="Center" Margin="0,0,0,0" Content="Go" Click="Go_Click" ToolTipService.ToolTip="Run your full code (includes loading)" MinWidth="55"/>
+                    <Button Name="Load" HorizontalAlignment="Center" Margin="0,36,0,0" Content="Load" Click="Load_Click" ToolTipService.ToolTip="Load your code into memory" MinWidth="55"/>
+                    <Button Name="Step" HorizontalAlignment="Center" Margin="0,12,0,0" Content="Step" Click="Step_Click" ToolTipService.ToolTip="Run the next step" MinWidth="55"/>
                 </StackPanel>
+                    
+                <StackPanel MinWidth="100">
+                    <TextBox Margin="0,0,0,0" Name="Input_Input" Header="Input" ToolTipService.ToolTip="Enter your input here" TextChanged="Input_Input_TextChanged" AcceptsReturn="True" MinHeight="234"/>
+                    <TextBox Margin="0,12,0,0" Name="Output_Accumulator" Header="Accumulator" ToolTipService.ToolTip="The current accumulator content" IsReadOnly="True" MinHeight="10"/>
+                    <TextBox Margin="0,12,0,0" Name="Output_Output" Header="Output" ToolTipService.ToolTip="Your output will appear here" IsReadOnly="True" MinHeight="244"/>
+                </StackPanel>
+
+                <TextBox Margin="24,0,0,0" Name="Output_Memory" Header="Memory" AcceptsReturn="True" IsReadOnly="True"/>
             </StackPanel>
             
             <!-- Help -->

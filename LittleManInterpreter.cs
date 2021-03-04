@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
 namespace LittleManComputer
 {
-    class LittleManInterpreter
+    internal class LittleManInterpreter
     {
-        int[] memory;
-        int accumulator;
-        int memoryPosition;
-        int inputPosition;
+        private int[] memory;
+        private int accumulator;
+        private int memoryPosition;
+        private int inputPosition;
 
-        bool finished = false;
-        bool error = false;
+        private bool finished = false;
+        private bool error = false;
 
-        string output = "";
+        private string output = "";
 
-        readonly string[] enteredMachineCode;
-        readonly string[] enteredInput;
+        private readonly string[] enteredMachineCode;
+        private readonly string[] enteredInput;
 
         public LittleManInterpreter(string[] enteredMachineCode, string[] enteredInput)
         {
@@ -36,13 +30,13 @@ namespace LittleManComputer
         {
             string lineNumbers = "";
             int lineNumber = 0;
-            for (int i=0; i<enteredMachineCode.Length; i++)
+            for (int i = 0; i < enteredMachineCode.Length; i++)
             {
                 string currentLine = enteredMachineCode[i];
-                if (string.IsNullOrEmpty(currentLine.Replace(" ","")))
+                if (string.IsNullOrEmpty(currentLine.Replace(" ", "")))
                 {
                     lineNumbers += "\r\n";
-                } 
+                }
                 else
                 {
                     lineNumbers += lineNumber.ToString() + "\r\n";
@@ -95,7 +89,7 @@ namespace LittleManComputer
                 return "HLT";
             }
             return "DAT " + command.ToString();
-        } 
+        }
 
         public string GetEasyReadableCode()
         {
@@ -116,6 +110,40 @@ namespace LittleManComputer
             return easyCode;
         }
 
+        public string GetMemory()
+        {
+            string str = "";
+            for (int i = 0; i < memory.Length; i++)
+            {
+                if (memoryPosition == i)
+                {
+                    str += "[" + i.ToString().PadLeft(2, '0') + "] " + memory[i].ToString().PadLeft(3, '0') + " <--\r\n";
+                }
+                else
+                {
+                    str += "[" + i.ToString().PadLeft(2, '0') + "] " + memory[i].ToString().PadLeft(3, '0') + "\r\n";
+                }
+            }
+            return str;
+        }
+
+        public string GetAccumulator()
+        {
+            return accumulator.ToString();
+        }
+
+        public string GetOutput()
+        {
+            return output;
+        }
+
+        public bool IsFinished()
+        {
+            return finished;
+        }
+
+        // In and output
+
         private void Output(string text)
         {
             output += text + "\r\n";
@@ -127,7 +155,7 @@ namespace LittleManComputer
             {
                 if (enteredInput.Length <= inputPosition)
                 {
-                    throw new Exception("Tried to read unexistant input!");
+                    throw new Exception("No more input available!");
                 }
 
                 string currentLine = enteredInput[inputPosition];
@@ -141,7 +169,8 @@ namespace LittleManComputer
                 {
                     throw new Exception("Input is not a number!");
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 finished = false;
                 error = true;
@@ -160,7 +189,6 @@ namespace LittleManComputer
                 }
                 catch (Exception)
                 {
-
                 }
                 return 0;
             }
@@ -168,14 +196,15 @@ namespace LittleManComputer
 
         // Interpreter
 
-        private void LoadIntoMemory()
+        public void LoadIntoMemory()
         {
-            memory = new int[1000];
+            memory = new int[100];
             accumulator = 0;
             memoryPosition = 0;
             inputPosition = 0;
 
             finished = false;
+            error = false;
 
             int pos = 0;
             for (int i = 0; i < enteredMachineCode.Length; i++)
@@ -187,7 +216,7 @@ namespace LittleManComputer
                     {
                         memory[pos] = number;
                         pos++;
-                    } 
+                    }
                     else
                     {
                         finished = true;
@@ -207,7 +236,6 @@ namespace LittleManComputer
                         }
                         catch (Exception)
                         {
-
                         }
                         return;
                     }
@@ -215,77 +243,79 @@ namespace LittleManComputer
             }
         }
 
-        private void RunStep()
+        public void RunStep()
         {
-            int command = memory[memoryPosition];
-            memoryPosition++;
+            if (!finished && !error)
+            {
+                int command = memory[memoryPosition];
+                memoryPosition++;
 
-            if (100 <= command && command < 200)
-            {
-                accumulator += memory[command - 100];
-            }
-            else if (200 <= command && command < 300)
-            {
-                accumulator -= memory[command - 200];
-            }
-            else if (300 <= command && command < 400)
-            {
-                memory[command - 300] = accumulator;
-            }
-            else if (500 <= command && command < 600)
-            {
-                accumulator = memory[command - 500];
-            }
-            else if (600 <= command && command < 700)
-            {
-                memoryPosition = command - 600;
-            }
-            else if (700 <= command && command < 800)
-            {
-                if (accumulator == 0)
+                if (100 <= command && command < 200)
                 {
-                    memoryPosition = command - 700;
+                    accumulator += memory[command - 100];
                 }
-            }
-            else if (800 <= command && command < 900)
-            {
-                if (accumulator >= 0)
+                else if (200 <= command && command < 300)
                 {
-                    memoryPosition = command - 800;
+                    accumulator -= memory[command - 200];
                 }
-            }
-            else if (command == 901)
-            {
-                accumulator = Input();
-            }
-            else if (command == 902)
-            {
-                Output(accumulator.ToString());
-            }
-            else if (command == 0)
-            {
-                finished = true;
-            }
-            else
-            {
-                finished = true;
-                error = true;
-                Output("ERROR (Unknown Command)");
-
-                try
+                else if (300 <= command && command < 400)
                 {
-                    ContentDialog dialog = new ContentDialog
+                    memory[command - 300] = accumulator;
+                }
+                else if (500 <= command && command < 600)
+                {
+                    accumulator = memory[command - 500];
+                }
+                else if (600 <= command && command < 700)
+                {
+                    memoryPosition = command - 600;
+                }
+                else if (700 <= command && command < 800)
+                {
+                    if (accumulator == 0)
                     {
-                        Title = "Unknown command",
-                        Content = "Unknown command at line " + memoryPosition.ToString(),
-                        CloseButtonText = "Ok"
-                    };
-
-                    _ = dialog.ShowAsync();
+                        memoryPosition = command - 700;
+                    }
                 }
-                catch (Exception)
+                else if (800 <= command && command < 900)
                 {
+                    if (accumulator >= 0)
+                    {
+                        memoryPosition = command - 800;
+                    }
+                }
+                else if (command == 901)
+                {
+                    accumulator = Input();
+                }
+                else if (command == 902)
+                {
+                    Output(accumulator.ToString());
+                }
+                else if (command == 0)
+                {
+                    finished = true;
+                }
+                else
+                {
+                    finished = true;
+                    error = true;
+                    Output("ERROR (Unknown Command)");
 
+                    try
+                    {
+                        ContentDialog dialog = new ContentDialog
+                        {
+                            Title = "Unknown command",
+                            Content = "Unknown command at memory position " + memoryPosition.ToString() + ": " + command.ToString(),
+                            CloseButtonText = "Ok"
+                        };
+
+                        _ = dialog.ShowAsync();
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
             }
         }
@@ -294,7 +324,7 @@ namespace LittleManComputer
         {
             LoadIntoMemory();
 
-            while (!finished)
+            while (!finished && !error)
             {
                 RunStep();
             }
